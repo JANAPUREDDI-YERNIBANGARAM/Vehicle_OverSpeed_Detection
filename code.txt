@@ -1,0 +1,45 @@
+//Vehicle Over Speed Detection
+//we take two IR Sensors
+//arranged two sensor by maintaining some constant distance between them
+int sen1=A0;
+int sen2=A3;
+int ledPin=3;
+float velocity;
+float velocity_real;
+float timeFirst;
+float timeScnd;
+float diff;
+float speedConst=8;//in cm
+long duration1;
+long duration2;
+void setup(){
+	Serial.begin(9600);
+	pinMode(sen1,INPUT);
+	pinMode(sen2,INPUT);
+}
+void loop(){
+	if(analogRead(sen1)<500 && analogRead(sen2)>500){
+		timeFirst=millis();//time at first sensor
+		delay(30);
+	}
+	if(analogRead(sen2)>500 && analogRead(sen1)<500){
+		timeScnd=millis();
+		diff=timeScnd-timeFirst;
+		velocity=speedConst/diff;
+		velocity_real=(velocity*360)/100;
+		//milliseconds to hours and centimeters to kilometers
+	Serial.print("\n the velocity is :");
+	Serial.println(velocity_real);
+	Serial.print(" km/hr. ");
+	delay(500);
+	}
+	if(velocity_real>0.9){
+		digitalWrite(ledPin,HIGH);
+	}
+	else{
+		digitalWrite(ledPin,LOW);
+	}
+	}
+		
+		
+
